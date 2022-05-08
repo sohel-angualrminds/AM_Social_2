@@ -93,7 +93,7 @@ function Header() {
                         >
                             {settings.map((setting) => (
                                 <Box key={setting}>
-                                    {setting == "Logout" && <Divider sx={{ m: 0 }} />}
+                                    {setting === "Logout" && <Divider sx={{ m: 0 }} />}
                                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>

@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "0e9925e1-10e4-49d6-b574-d0d3d3ac11c9",
+		"name": "AM-Social",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\":\"test2\",\n    \"lastName\":\"test2\",\n    \"email\":\"test2@gmail.com\",\n    \"password\":\"test2@123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/user/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test2@gmail.com\",\n    \"password\":\"test2@123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmM0Zjc1N2M1MzM0MTBkMjQ5Y2QwMiIsImVtYWlsIjoidGVzdDFAZy5jb20iLCJuYW1lIjoidGVzdDEiLCJpYXQiOjE2NTE0OTA4NzYsImV4cCI6MTY1MTU3NzI3Nn0._t1Xzau0fUs8E9qi9RLeFu4o4A-yO8GJRMnhUDW3u1g",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\":\"test1@123\",\r\n    \"password\":\"test1@1234\",\r\n    \"confirmPassword\":\"test1@1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/user/changepassword/626c4f757c533410d249cd02",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"user",
+								"changepassword",
+								"626c4f757c533410d249cd02"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "add new post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzM1MmU2NTU2NGZmYTAzMTY2YzI2OCIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIiwibmFtZSI6InRlc3QyIiwiaWF0IjoxNjUxNzI1MDYxLCJleHAiOjE2NTE4MTE0NjF9.zp042_lP49cFrt83si02BoSDzD6_U69qiMnnsXnmOEQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/am-pc-16/Downloads/hritik.jpg"
+								},
+								{
+									"key": "caption",
+									"value": "hritik",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7000/feed/addPost",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"feed",
+								"addPost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All Posts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzM1MmU2NTU2NGZmYTAzMTY2YzI2OCIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIiwibmFtZSI6InRlc3QyIiwiaWF0IjoxNjUxNzI1MDYxLCJleHAiOjE2NTE4MTE0NjF9.zp042_lP49cFrt83si02BoSDzD6_U69qiMnnsXnmOEQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:7000/feed/?page=1&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"feed",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "for perticular data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmM0ZmI0MmVmMjU2NjFhZTBhNmMwYyIsImVtYWlsIjoidGVzdDJAZy5jb20iLCJuYW1lIjoidGVzdDIiLCJpYXQiOjE2NTEyNjgxOTgsImV4cCI6MTY1MTM1NDU5OH0.op-JBKtvmJcKnTV5nBFC43e7_tOYIy6fTNcHe-F8R5c",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7000/feed/626c4fb42ef25661ae0a6c0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"feed",
+								"626c4fb42ef25661ae0a6c0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forTestPurpose",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmM0ZmI0MmVmMjU2NjFhZTBhNmMwYyIsImVtYWlsIjoidGVzdDJAZy5jb20iLCJuYW1lIjoidGVzdDIiLCJpYXQiOjE2NTEyNjgxOTgsImV4cCI6MTY1MTM1NDU5OH0.op-JBKtvmJcKnTV5nBFC43e7_tOYIy6fTNcHe-F8R5c",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7000/uploads\\\\posts\\\\626c4fb42ef25661ae0a6c0c_165126879831620200824_154816.jpg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"uploads",
+								"",
+								"posts",
+								"",
+								"626c4fb42ef25661ae0a6c0c_165126879831620200824_154816.jpg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmM0Zjc1N2M1MzM0MTBkMjQ5Y2QwMiIsImVtYWlsIjoidGVzdDFAZy5jb20iLCJuYW1lIjoidGVzdDEiLCJpYXQiOjE2NTE0NjkxMzIsImV4cCI6MTY1MTU1NTUzMn0.KjFTcJcvViWpDI_fREbzq8fmMZuKnlmpYCOXzi9RePI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\":\"I am pllaying valo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/feed/comment/626c6a5f680d8749672a16ec",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"feed",
+								"comment",
+								"626c6a5f680d8749672a16ec"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add like",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmM0Zjc1N2M1MzM0MTBkMjQ5Y2QwMiIsImVtYWlsIjoidGVzdDFAZy5jb20iLCJuYW1lIjoidGVzdDEiLCJpYXQiOjE2NTE0NjkxMzIsImV4cCI6MTY1MTU1NTUzMn0.KjFTcJcvViWpDI_fREbzq8fmMZuKnlmpYCOXzi9RePI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7000/feed/like/626c6a5f680d8749672a16ec",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"feed",
+								"like",
+								"626c6a5f680d8749672a16ec"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "upload profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNmM0ZmI0MmVmMjU2NjFhZTBhNmMwYyIsImVtYWlsIjoidGVzdDJAZy5jb20iLCJuYW1lIjoidGVzdDIiLCJpYXQiOjE2NTEyNjc4NjUsImV4cCI6MTY1MTM1NDI2NX0.8TV_GU4cIZJeqe1YyIQexV_oQ38bR_vMU4jdRaB6Py4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/F:/download/20200824_154816.jpg"
+								},
+								{
+									"key": "bio",
+									"value": "ABCD",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "male",
+									"type": "text"
+								},
+								{
+									"key": "dob",
+									"value": "25/05/1997",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test2@g.com",
+									"type": "text"
+								},
+								{
+									"key": "mobileNumber",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "abcd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:7000/profile/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"profile",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzM1MmU2NTU2NGZmYTAzMTY2YzI2OCIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIiwibmFtZSI6InRlc3QyIiwiaWF0IjoxNjUxNzI1MDYxLCJleHAiOjE2NTE4MTE0NjF9.zp042_lP49cFrt83si02BoSDzD6_U69qiMnnsXnmOEQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7000/profile/user/62721811d8dcc2c84e4ade2c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"profile",
+								"user",
+								"62721811d8dcc2c84e4ade2c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
