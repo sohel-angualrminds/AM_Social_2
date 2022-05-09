@@ -7,17 +7,19 @@ import Card from '../Card/Card';
 import Skeleton from '../Skeleton/Skeleton'
 import Modal from '../AddPost/Modal';
 import { getAllPosts } from '../../Services/Services';
-import Snakbar from '../Snackbar/Snackbars';
+
 
 const fakeSkeleton = [1020, 1024, 2024, 3024, 4050];
-
 
 function Parent() {
     /*for getting all states*/
     const [allPosts, setAllPost] = useState(() => []);
     const [error, setError] = useState(null);
-
+    const [postAdded, setPostAdded] = useState(() => false);
     /********************************************************************************/
+
+
+
     //for getting all posts
     async function getsAllPosts() {
         try {
@@ -37,6 +39,10 @@ function Parent() {
     }
 
 
+    async function setStatesValue(value) {
+        setPostAdded(value)
+    }
+
     /********************************************************************************/
 
     /*use effects */
@@ -44,14 +50,14 @@ function Parent() {
         const get = async () => {
             try {
                 const res = await getsAllPosts();
-                // console.log(res);
+                setStatesValue(false);
                 setAllPost(res.results);
             } catch (err) {
                 console.error("use Effects", err)
             }
         }
         get();
-    }, []);
+    }, [postAdded]);
 
     return (
         <div>
@@ -70,8 +76,7 @@ function Parent() {
                             fakeSkeleton.map(key => <Skeleton key={key} />)
                     }
                 </Box>
-                <Modal />
-                {error && <Snakbar />}
+                <Modal setState={setStatesValue} />
             </Container>
         </div >
     )

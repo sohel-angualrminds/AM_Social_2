@@ -14,6 +14,7 @@ import Stack from '@mui/material/Stack';
 import { Divider } from '@mui/material';
 import "./header.css"
 
+
 const settings = ['Edit Profile', 'Change Password', 'Logout'];
 
 function Header() {
@@ -31,6 +32,7 @@ function Header() {
         <AppBar position="sticky" sx={{ bgcolor: "white", color: "black" }}>
             <Container maxWidth="md">
                 <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
+
                     <Stack direction={"row"} sx={{ alignItems: "center", cursor: "pointer" }}>
                         <CameraEnhanceIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                         <Typography
@@ -43,12 +45,12 @@ function Header() {
                                 fontFamily: 'Macondo,cursive',
                                 fontWeight: 700,
                                 letterSpacing: '.3rem',
-                                color: 'black',
                                 textDecoration: 'none',
                             }}
                         >
                             AM-Feed
                         </Typography>
+
                         <CameraEnhanceIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                         <Typography
                             variant="h5"
@@ -61,13 +63,14 @@ function Header() {
                                 fontFamily: 'Macondo,cursive',
                                 fontWeight: 700,
                                 letterSpacing: '.3rem',
-                                color: 'black',
                                 textDecoration: 'none',
+                                color: "#1a237e"
                             }}
                         >
                             AM-Feed
                         </Typography>
                     </Stack>
+
 
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">

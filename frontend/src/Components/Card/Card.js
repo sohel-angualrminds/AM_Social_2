@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -14,8 +14,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
-import { Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import CommentList from '../List/CommentList';
 
 
 const ExpandMore = styled((props) => {
@@ -29,41 +29,54 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function CustomCard() {
+export default function CustomCard(props) {
+    // console.log(props);
+    const [data, setData] = useState(null);
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
+
+    /************************************************************/
+    useEffect(() => {
+        setData(props.data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    /************************************************************/
+
     return (
         <Card sx={{ maxWidth: 600, m: 2 }} elevation={20}>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        R
+                    <Avatar sx={{ bgcolor: red[500] }}
+                        alt={data && `${data.userINFO.firstName[0]}${data.userINFO.lastName[0]}`}>
+                        {data && `${data.userINFO.firstName[0]}${data.userINFO.lastName[0]}`}
                     </Avatar>
                 }
-                title="Shrimp and Chorizo Paella"
+                title={data && `${data.userINFO.firstName} ${data.userINFO.lastName}`}
+                subheader={data && data.userINFO.email}
             />
+
+
             <CardMedia
                 component="img"
-                height="194"
-                image="/static/images/cards/paella.jpg"
-                alt="Paella dish"
+                height="400"
+                sx={{ width: "37.5rem", objectFit: "cover" }}
+                image={data && `http://localhost:7000/${data.image}`}
+                alt={data && `${data.caption}'s image`}
             />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                    This impressive paella is a perfect party dish and a fun meal to cook
-                    together with your guests. Add 1 cup of frozen peas along with the mussels,
-                    if you like.
+                    {data && data.caption}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton aria-label="add to favorites">
                     <FavoriteIcon />
                     <Typography sx={{ mx: 1 }}>
-                        7
+                        {data && data.likesCount}
                     </Typography>
                 </IconButton>
 
@@ -106,7 +119,7 @@ export default function CustomCard() {
                     color="text.secondary"
                     sx={{ ml: 1 }}
                 >
-                    View All 7 comments
+                    View All {data && data.commentsCount} comments
                 </Typography>
                 <ExpandMore
                     expand={expanded}
@@ -116,31 +129,9 @@ export default function CustomCard() {
             </Box>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>Method:</Typography>
-                    <Typography paragraph>
-                        Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                        aside for 10 minutes.
-                    </Typography>
-                    <Typography paragraph>
-                        Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-                        medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-                        occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-                        large plate and set aside, leaving chicken and chorizo in the pan. Add
-                        pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-                        stirring often until thickened and fragrant, about 10 minutes. Add
-                        saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-                    </Typography>
-                    <Typography paragraph>
-                        Add rice and stir very gently to distribute. Top with artichokes and
-                        peppers, and cook without stirring, until most of the liquid is absorbed,
-                        15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-                        mussels, tucking them down into the rice, and cook again without
-                        stirring, until mussels have opened and rice is just tender, 5 to 7
-                        minutes more. (Discard any mussels that don&apos;t open.)
-                    </Typography>
-                    <Typography>
-                        Set aside off of the heat to let rest for 10 minutes, and then serve.
-                    </Typography>
+                    {
+                        data && data.comments.map(commentInfo => <CommentList key={commentInfo._id} details={commentInfo} />)
+                    }
                 </CardContent>
             </Collapse>
         </Card >
