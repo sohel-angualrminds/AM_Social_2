@@ -17,6 +17,8 @@ import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 import CommentList from '../List/CommentList';
 import Fade from '@mui/material/Fade';
+import { addComment } from '../../Services/Services'
+
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -30,14 +32,21 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function CustomCard(props) {
-    // console.log(props);
+
     const [data, setData] = useState(null);
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = useState(false);
+    const [comment, setComment] = useState("");
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
+    const sendComment = async (id) => {
+        const res = await addComment({ id, comment });
+        console.log(res);
+        setData(res.data.data);
+        setComment('');
+    }
 
     /************************************************************/
     useEffect(() => {
@@ -45,6 +54,8 @@ export default function CustomCard(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     /************************************************************/
+
+
 
     return (
         <Fade in={true}
@@ -99,8 +110,11 @@ export default function CustomCard(props) {
                         <Input
                             color="grey"
                             fullWidth={true}
-                            placeholder="Share your feelings..." />
-                        <IconButton aria-label="sending comments" sx={{ m: 0, p: 0 }}>
+                            placeholder="Share your feelings..."
+                            value={comment}
+                            onChange={e => setComment(e.target.value)}
+                        />
+                        <IconButton onClick={() => sendComment(data._id)} aria-label="sending comments" sx={{ m: 0, p: 0 }}>
                             <SendIcon />
                         </IconButton>
                     </Box>

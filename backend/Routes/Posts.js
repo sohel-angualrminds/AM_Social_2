@@ -196,7 +196,7 @@ post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
             return res.status(201).send({
                 success: true,
                 message: "comment added",
-                comments: result2
+                data: result2
             })
         }
         else {

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
 
 const vertical = "top";
@@ -18,11 +16,14 @@ export default function CustomSnackbar(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
     useEffect(() => {
         const { error, message, open, severity } = props.object;
         setOpen(open);
         setDetails({ message, error, severity })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <div>
             <Snackbar
