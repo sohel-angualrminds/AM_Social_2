@@ -7,6 +7,7 @@ import Card from '../Card/Card';
 import Skeleton from '../Skeleton/Skeleton'
 import Modal from '../AddPost/Modal';
 import { getAllPosts } from '../../Services/Services';
+import CustomSnackbar from '../Snackbar/snackbar'
 
 
 const fakeSkeleton = [1020, 1024, 2024, 3024, 4050];
@@ -14,6 +15,7 @@ const fakeSkeleton = [1020, 1024, 2024, 3024, 4050];
 function Parent() {
     /*for getting all states*/
     const [allPosts, setAllPost] = useState(() => []);
+    const [success, setSuccess] = useState(() => null);
     const [error, setError] = useState(null);
     const [postAdded, setPostAdded] = useState(() => false);
     /********************************************************************************/
@@ -39,8 +41,23 @@ function Parent() {
     }
 
 
-    async function setStatesValue(value) {
-        setPostAdded(value)
+    async function setStatesValue(value, snackbar = {}) {
+        const { error, success, message } = snackbar;
+        if (error) {
+            setError({ error, message, open: true, severity: "error" });
+            setTimeout(() => {
+                setError(null);
+            }, 4000);
+            return
+        }
+
+        if (success) {
+            setSuccess({ success, message, open: true, severity: "success" });
+            setTimeout(() => {
+                setSuccess(null);
+            }, 4000);
+        }
+        setPostAdded(value);
     }
 
     /********************************************************************************/
@@ -71,12 +88,14 @@ function Parent() {
                     alignItems: "center"
                 }}>
                     {
-                        allPosts.length > 0 ?
-                            allPosts.map((post) => <Card key={post._id} data={post} />) :
-                            fakeSkeleton.map(key => <Skeleton key={key} />)
+                        allPosts.length > 0 ? allPosts.map((post) => <Card key={post._id} data={post} />)
+                            : fakeSkeleton.map(key => <Skeleton key={key} />)
                     }
                 </Box>
                 <Modal setState={setStatesValue} />
+                {/*Snackbars*/}
+                {error && <CustomSnackbar object={error} />}
+                {success && <CustomSnackbar object={success} />}
             </Container>
         </div >
     )

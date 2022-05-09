@@ -8,13 +8,14 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { Add, Send, PhotoSizeSelectActual } from '@mui/icons-material';
-import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Fab from '@mui/material/Fab';
 import Chip from '@mui/material/Chip';
 import { ThemeProvider, styled } from '@mui/material/styles';
 import { color } from '../color'
 import { postNewPost } from '../../Services/Services'
+import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
 
 const Input = styled('input')({
     display: 'none',
@@ -39,7 +40,7 @@ export default function TransitionsModal(props) {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [caption, setCaption] = useState('');
-
+    const [loading, setLoading] = useState(false);
     const { setState } = props;
 
 
@@ -54,16 +55,33 @@ export default function TransitionsModal(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!selectedImage) {
+            setState(false, { error: true, success: false, message: "please add image !!" });
+            return;
+        }
 
         const formData = new FormData();
         formData.append("image", selectedImage);
         formData.append("caption", caption);
 
         const res = await postNewPost(formData);
-        if (res.status === 201)
+        if (res.status === 201) {
+            setLoading(true);
+            setTimeout(() => {
+                setState(true, { error: false, success: true, message: "Post Added Succesfully" });
+            }, 4000);
+        }
+        else {
+            setLoading(true);
+            setTimeout(() => {
+                setState(false, { error: true, success: false, message: res.data.message });
+            }, 4000);
+        }
 
-            setState(true);
-        handleClose();
+        setTimeout(() => {
+            setLoading(false);
+            handleClose();
+        }, 3000);
     }
 
     useEffect(() => {
@@ -161,9 +179,16 @@ export default function TransitionsModal(props) {
                             <Button variant="outlined" onClick={handleClose} color="error" size="small" endIcon={<CancelIcon />}>
                                 cancel
                             </Button>
-                            <Button onClick={handleSubmit} variant="contained" size="small" endIcon={<Send />}>
+                            <LoadingButton
+                                loading={loading}
+                                loadingPosition="end"
+                                onClick={handleSubmit}
+                                variant="contained"
+                                size="small"
+                                endIcon={<Send />}
+                            >
                                 Post
-                            </Button>
+                            </LoadingButton>
                         </Stack>
                     </Box>
                 </Fade>
