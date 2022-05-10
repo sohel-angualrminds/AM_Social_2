@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/signup" element={<Signup />} />
-        <Route exact path="/" element={<Parent />} />
+        <Route exact path="/feed" element={<Parent />} />
       </Routes>
     </Router>
   );

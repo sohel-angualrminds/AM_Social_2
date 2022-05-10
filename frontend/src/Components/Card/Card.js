@@ -19,6 +19,7 @@ import CommentList from '../List/CommentList';
 import Fade from '@mui/material/Fade';
 import { addComment, addLike } from '../../Services/Services';
 import { _id } from '../../Id'
+import { TextField } from '@mui/material';
 
 
 const ExpandMore = styled((props) => {
@@ -44,16 +45,12 @@ export default function CustomCard(props) {
 
     const sendComment = async (id) => {
         const res = await addComment({ id, comment });
-        console.log(res);
         setData(res.data.data);
         setComment('');
     }
 
     const addLikeOnPost = async (id) => {
-        // console.log(id);
-        // console.log(userINFO);
         const res = await addLike({ id });
-        console.log(res);
         setData(res.data.data);
     }
     /************************************************************/
@@ -97,14 +94,14 @@ export default function CustomCard(props) {
                 </CardContent>
                 <CardActions disableSpacing>
                     <IconButton aria-label="add to favorites" onClick={() => addLikeOnPost(data._id)}>
-                        <FavoriteIcon color={data && (data.likes.includes(_id) ? "error" : "grey") || "grey"} />
+                        <FavoriteIcon color={data ? (data.likes.includes(_id) ? "error" : "grey") : "grey"} />
                         <Typography sx={{ mx: 1 }}>
                             {data && data.likesCount}
                         </Typography>
                     </IconButton>
 
                     <Box
-                        component="form"
+                        component="div"
                         sx={{
                             '& > :not(style)': { m: 1 },
                             width: "100%",
@@ -115,12 +112,13 @@ export default function CustomCard(props) {
                         noValidate
                         autoComplete="off"
                     >
-                        <Input
+                        <TextField
                             color="grey"
                             fullWidth={true}
                             placeholder="Share your feelings..."
                             value={comment}
                             onChange={e => setComment(e.target.value)}
+                            variant="standard"
                         />
                         <IconButton onClick={() => sendComment(data._id)} aria-label="sending comments" sx={{ m: 0, p: 0 }}>
                             <SendIcon />

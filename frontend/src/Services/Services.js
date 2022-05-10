@@ -1,11 +1,12 @@
 import api from './api';
+import { getToken } from './local';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzRmYjMyMDA3NzBlN2NkMzk2ZjMyMSIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIiwibmFtZSI6InRlc3QyIiwiaWF0IjoxNjUyMTU3NzA2LCJleHAiOjE2NTIyNDQxMDZ9.mdBSsszJkheQVr3UOg1_vsGHt77An_YY3e2i2CnGV-E";
-
-const header = {
-    headers: {
-        authorization: token,
-        'content-type': "application/json; charset=utf-8"
+const header = () => {
+    return {
+        headers: {
+            authorization: getToken(),
+            'content-type': "application/json; charset=utf-8"
+        }
     }
 }
 
@@ -41,7 +42,12 @@ export const login = async (object) => {
 export const getAllPosts = async (page = 1, limit = 10) => {
     try {
         // /feed/?page=1&limit=10
-        const result = await api.get(`/feed/?page=${page}&limit=${limit}`, header);
+        const result = await api.get(`/feed/?page=${page}&limit=${limit}`, {
+            headers: {
+                authorization: getToken(),
+                'content-type': "application/json; charset=utf-8"
+            }
+        });
         return result;
     } catch (err) {
         return err;
@@ -53,7 +59,7 @@ export const getAllPosts = async (page = 1, limit = 10) => {
 */
 export const postNewPost = async (object) => {
     try {
-        const res = await api.post("/feed/addPost", object, header);
+        const res = await api.post("/feed/addPost", object, header());
         return res;
     } catch (err) {
         return err;
@@ -65,7 +71,7 @@ export const postNewPost = async (object) => {
  */
 export const addComment = async (object) => {
     try {
-        const res = await api.put(`/feed/comment/${object.id}`, { comment: object.comment }, header);
+        const res = await api.put(`/feed/comment/${object.id}`, { comment: object.comment }, header());
         return res;
     }
     catch (err) {
@@ -78,7 +84,7 @@ export const addComment = async (object) => {
  */
 export const addLike = async (object) => {
     try {
-        const res = await api.put(`/feed/like/${object.id}`, {},header);
+        const res = await api.put(`/feed/like/${object.id}`, {}, header());
         return res;
     }
     catch (err) {
@@ -91,7 +97,7 @@ export const addLike = async (object) => {
  */
 export const editProfile = async (object) => {
     try {
-        const res = await api.put('/profile/edit', object, header);
+        const res = await api.put('/profile/edit', object, header());
         return res;
     }
     catch (err) {
@@ -105,7 +111,7 @@ export const editProfile = async (object) => {
 */
 export const changePaswword = async (object) => {
     try {
-        const res = await api.post(`/user/changepassword/${object.id}`, header);
+        const res = await api.post(`/user/changepassword/${object.id}`, header());
         return res;
     } catch (err) {
         return err;

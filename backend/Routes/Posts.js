@@ -161,8 +161,14 @@ post_router.get('/:id', verifyToken, async (req, res) => {
 */
 post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
     try {
-
         let { comment } = req.body;
+        comment = comment.trim();
+        if (comment.length <= 0 || comment == " ")
+            return res.status(400).send({
+                success: false,
+                message: "Empty comment not valid",
+            })
+
         let newComment = {
             firstName: req.firstName,
             lastName: req.lastName,
