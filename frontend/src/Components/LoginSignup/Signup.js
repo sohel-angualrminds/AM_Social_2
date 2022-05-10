@@ -3,6 +3,7 @@ import { AccountCircle, Visibility, VisibilityOff, Email } from '@mui/icons-mate
 import Fade from '@mui/material/Fade';
 import { useNavigate, Link } from 'react-router-dom';
 import { validate } from '../validation'
+import { registerNewUser } from '../../Services/Services'
 import {
     Box, Card,
     IconButton,
@@ -44,11 +45,59 @@ function Signup() {
             setError({ ...error, [prop]: null })
         }
     }
-    const checkPassword = (e,prop) => {
-        if (validate.password(e.target.value)) {
-            
-        } else {
-            
+
+    const checkPassword = (e, prop) => {
+        if (!validate.password(e.target.value)) {
+            setError({ ...error, [prop]: { status: true, text: `${prop} should be length 6,1 special char,1 Number` } });
+        }
+        else {
+            setError({ ...error, [prop]: null })
+        }
+    }
+
+    const cancel = () => {
+        setError(null);
+        setValues({
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            showPassword: false,
+        });
+    }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (error && (error.password || error.firstName || error.lastName)) {
+            return;
+        }
+        let { email, password, firstName, lastName } = values;
+
+        if (!email || !password || !firstName || !lastName) {
+            let newError = {}
+            if (!email)
+                newError = { ...newError, 'email': { status: true, text: "email should not be empty" } };
+
+            if (!password)
+                newError = { ...newError, 'password': { status: true, text: "password should not be empty" } };
+
+            if (!firstName)
+                newError = { ...newError, 'firstName': { status: true, text: "firstName should not be empty" } };
+
+            if (!lastName)
+                newError = { ...newError, 'lastName': { status: true, text: "lastName should not be empty" } };
+
+            setError(newError);
+            return;
+        }
+
+        const result = await registerNewUser({ firstName, lastName, email, password });
+        if (result === 201) {
+
+        }
+        else {
+
         }
     }
 
@@ -156,6 +205,8 @@ function Signup() {
                                             ),
                                         }}
                                         variant="standard"
+                                        error={error && error.email && error.email.status}
+                                        helperText={error && error.email && error.email.text}
                                         required
                                     />
 
@@ -167,10 +218,8 @@ function Signup() {
                                         value={values.password}
                                         onChange={(e) => {
                                             handleChange(e, 'password');
-                                            checkPassword(e);
+                                            checkPassword(e, 'password');
                                         }}
-                                        error={error && error.password && error.password.status}
-                                        helperText={error && error.password && error.password.text}
                                         InputProps={{
                                             endAdornment: (
                                                 <InputAdornment position="end">
@@ -185,6 +234,8 @@ function Signup() {
                                             ),
                                         }}
                                         variant="standard"
+                                        error={error && error.password && error.password.status}
+                                        helperText={error && error.password && error.password.text}
                                         required
                                     />
                                 </Stack>
@@ -193,8 +244,8 @@ function Signup() {
                                     direction="row"
                                     sx={{ justifyContent: "center", mb: 2 }}
                                 >
-                                    <Button variant="outlined" size="small" color="error">Cancel</Button>
-                                    <Button variant="contained" size="small">Register</Button>
+                                    <Button onClick={cancel} variant="outlined" size="small" color="error">Cancel</Button>
+                                    <Button onClick={handleSubmit} variant="contained" size="small">Register</Button>
                                 </Stack>
                                 <Typography
                                     color="text.secondary"
