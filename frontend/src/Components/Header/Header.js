@@ -100,6 +100,7 @@ function Header() {
                                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>
+                                    {/* {setting === "Name" && <Divider sx={{ m: 0 }} />} */}
                                 </Box>
                             ))}
                         </Menu>

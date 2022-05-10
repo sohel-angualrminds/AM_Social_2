@@ -1,6 +1,6 @@
 import api from './api';
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzdlZDM1Njc3ZWZlYjIzMzlhOGRkYiIsImVtYWlsIjoidGVzdDNAZ21haWwuY29tIiwibmFtZSI6InRlc3QyIiwiaWF0IjoxNjUyMTE0NTM0LCJleHAiOjE2NTIyMDA5MzR9.49E05y7xK_394QdUNblOYTmltCSCQh5aX7MI7wUsh8I";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzRmYjMyMDA3NzBlN2NkMzk2ZjMyMSIsImVtYWlsIjoidGVzdDJAZ21haWwuY29tIiwibmFtZSI6InRlc3QyIiwiaWF0IjoxNjUyMTU3NzA2LCJleHAiOjE2NTIyNDQxMDZ9.mdBSsszJkheQVr3UOg1_vsGHt77An_YY3e2i2CnGV-E";
 
 const header = {
     headers: {
@@ -78,7 +78,7 @@ export const addComment = async (object) => {
  */
 export const addLike = async (object) => {
     try {
-        const res = await api.post(`/feed/like/${object.id}`, header);
+        const res = await api.put(`/feed/like/${object.id}`, {},header);
         return res;
     }
     catch (err) {

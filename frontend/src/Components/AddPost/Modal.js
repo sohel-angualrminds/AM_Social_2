@@ -101,12 +101,12 @@ export default function TransitionsModal(props) {
                         <Fab
                             sx={{
                                 position: 'fixed',
-                                bottom: 16,
-                                right: 330,
-                                boxShadow: "rgba(17, 17, 26, 0.8) 0px 4px 16px, rgba(17, 17, 26, 0.5) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;"
+                                top: 85,
+                                right: 360,
+                                // boxShadow: "rgba(17, 17, 26, 0.8) 0px 4px 16px, rgba(17, 17, 26, 0.5) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;"
                             }}
 
-                            color="secondary" aria-label="add">
+                            color="error" aria-label="add">
                             <Add />
                         </Fab>
                     </Tooltip>

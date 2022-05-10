@@ -17,7 +17,8 @@ import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 import CommentList from '../List/CommentList';
 import Fade from '@mui/material/Fade';
-import { addComment } from '../../Services/Services'
+import { addComment, addLike } from '../../Services/Services';
+import { _id } from '../../Id'
 
 
 const ExpandMore = styled((props) => {
@@ -48,6 +49,13 @@ export default function CustomCard(props) {
         setComment('');
     }
 
+    const addLikeOnPost = async (id) => {
+        // console.log(id);
+        // console.log(userINFO);
+        const res = await addLike({ id });
+        console.log(res);
+        setData(res.data.data);
+    }
     /************************************************************/
     useEffect(() => {
         setData(props.data);
@@ -88,8 +96,8 @@ export default function CustomCard(props) {
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
+                    <IconButton aria-label="add to favorites" onClick={() => addLikeOnPost(data._id)}>
+                        <FavoriteIcon color={data && (data.likes.includes(_id) ? "error" : "grey") || "grey"} />
                         <Typography sx={{ mx: 1 }}>
                             {data && data.likesCount}
                         </Typography>
@@ -148,7 +156,7 @@ export default function CustomCard(props) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         {
-                            data && data.comments.map(commentInfo => <CommentList key={commentInfo._id} details={commentInfo} />)
+                            data && data.comments.map(commentInfo => <CommentList key={commentInfo._id} details={commentInfo} />).reverse()
                         }
                     </CardContent>
                 </Collapse>
