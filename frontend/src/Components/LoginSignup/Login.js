@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Email, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
     Box, Card,
@@ -11,7 +11,7 @@ import { GoogleLogin } from 'react-google-login'
 import GoogleIcon from '@mui/icons-material/Google';
 import { login } from '../../Services/Services';
 import CustomSnackbar from '../Snackbar/snackbar'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { setItemToLocalStorage, setToken } from '../../Services/local';
 import Fade from '@mui/material/Fade';
 
@@ -25,7 +25,7 @@ function Login() {
     });
     const [success, setSuccess] = useState(() => null);
     const [error, setError] = useState(() => null);
-
+    let Location = useLocation();
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
@@ -42,27 +42,33 @@ function Login() {
     };
 
     const handleSubmit = async (event) => {
+        setError(null);
+        setSuccess(null);
         event.preventDefault();
         const res = await login({ email: values.email, password: values.password });
         if (res.status === 200) {
             setSuccess({ success: true, message: "Login Succesfull", open: true, severity: "success" });
-
             setItemToLocalStorage("userINFO", res.data.userInfo);
             await setToken(res.data.token, 1);
             setTimeout(() => {
-                setSuccess(null);
                 navigate('/feed');
             }, 1000);
         }
         else {
             setError({ error: true, message: "invalid credentials", open: true, severity: "error" });
-            setTimeout(() => {
-                setError(null);
-            }, 4000);
+
             return
         }
     }
     const responseGoogle = (res) => { }
+
+    useEffect(() => {
+        if (Location.state) {
+            setSuccess(Location.state.success);
+            Location.state = null;
+        }
+    }, []);
+
 
     return (
         <Fade in={true}

@@ -10,6 +10,7 @@ import {
     InputAdornment, CardHeader,
     Typography, CardContent, Stack, Button, TextField
 } from '@mui/material';
+import CustomSnackbar from '../Snackbar/snackbar';
 
 
 function Signup() {
@@ -20,8 +21,10 @@ function Signup() {
         password: '',
         showPassword: false,
     });
-
     const [error, setError] = useState(null);
+    const [apiError, setApiError] = useState(() => null);
+
+    let Navigate = useNavigate();
 
     const handleChange = (event, prop) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -68,6 +71,7 @@ function Signup() {
 
 
     const handleSubmit = async (e) => {
+        setApiError(null);
         e.preventDefault();
         if (error && (error.password || error.firstName || error.lastName)) {
             return;
@@ -93,11 +97,14 @@ function Signup() {
         }
 
         const result = await registerNewUser({ firstName, lastName, email, password });
-        if (result === 201) {
 
+        if (result.status === 201) {
+            let success = { success: true, message: "Register succesfull", open: true, severity: "success" }
+            Navigate('/', { state: { success } });
+            return;
         }
         else {
-
+            setApiError({ error: true, message: result.response.data.message, open: true, severity: "error" });
         }
     }
 
@@ -258,6 +265,7 @@ function Signup() {
                         </Box>
                     </Card >
                 </Box >
+                {apiError && <CustomSnackbar object={apiError} />}
             </div>
         </Fade>
     )

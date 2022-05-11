@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,14 +12,23 @@ import MenuItem from '@mui/material/MenuItem';
 import CameraEnhanceIcon from '@mui/icons-material/CameraEnhance';
 import Stack from '@mui/material/Stack';
 import { Divider } from '@mui/material';
+import { clearAll, getItemFromLocalStorage } from '../../Services/local';
+import { useNavigate } from 'react-router-dom';
 import "./header.css"
 
 
-const settings = ['Edit Profile', 'Change Password', 'Logout'];
+const settings = [
+    { id: "1qw2", name: 'Edit Profile', callableFunction: "editProfile" },
+    { id: "2rt3", name: 'Change Password', callableFunction: "changePassword" },
+    { id: "3yu4", name: 'Logout', callableFunction: "logout" }
+];
 
-function Header() {
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+function Header(props) {
+    let Navigate = useNavigate();
+    /******************************************************************************/
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    const [userINFO, setUserINFO] = useState(() => null);
+    /******************************************************************************/
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -28,6 +37,37 @@ function Header() {
         setAnchorElUser(null);
     };
 
+    const editProfile = () => { console.log("edit profile") }
+    const changePassword = () => { console.log("change password") }
+    const logout = () => {
+        clearAll();
+        Navigate('/');
+    }
+
+    //calling different different functions over here
+    function callFunction(functionName) {
+        switch (functionName) {
+            case 'editProfile': editProfile(); break
+            case 'changePassword': changePassword(); break
+            case 'logout': logout(); break
+            default: return;
+        }
+    }
+    /******************************************************************************/
+    //use effects
+    useEffect(() => {
+        let user = getItemFromLocalStorage()
+        settings.unshift({
+            id: "userInfo7",
+            name: `${user.firstName} ${user.lastName}`,
+            callableFunction: "noCall"
+        })
+        setUserINFO(getItemFromLocalStorage());
+    }, []);
+
+
+
+    /******************************************************************************/
     return (
         <AppBar position="sticky" sx={{ bgcolor: "white", color: "black" }}>
             <Container maxWidth="md">
@@ -75,7 +115,9 @@ function Header() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                <Avatar
+                                    alt={userINFO && `${userINFO.firstName} ${userINFO.lastName}`}
+                                    src="/static/images/avatar/2.jpg" />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -95,12 +137,16 @@ function Header() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <Box key={setting}>
-                                    {setting === "Logout" && <Divider sx={{ m: 0 }} />}
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
+                                <Box key={setting.id}>
+                                    {setting.name === "Logout" && <Divider sx={{ m: 0 }} />}
+                                    <MenuItem key={setting.id}
+                                        onClick={() => {
+                                            handleCloseUserMenu();
+                                            callFunction(setting.callableFunction)
+                                        }}>
+                                        <Typography textAlign="center">{setting.name}</Typography>
                                     </MenuItem>
-                                    {/* {setting === "Name" && <Divider sx={{ m: 0 }} />} */}
+                                    {setting.id === "userInfo7" && <Divider sx={{ m: 0 }} />}
                                 </Box>
                             ))}
                         </Menu>

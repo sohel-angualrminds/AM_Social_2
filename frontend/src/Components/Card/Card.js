@@ -12,14 +12,14 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 import CommentList from '../List/CommentList';
 import Fade from '@mui/material/Fade';
 import { addComment, addLike } from '../../Services/Services';
-import { _id } from '../../Id'
 import { TextField } from '@mui/material';
+import { Auth } from '../Auth/Auth'
+import { useNavigate } from 'react-router-dom'
 
 
 const ExpandMore = styled((props) => {
@@ -34,11 +34,11 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function CustomCard(props) {
-
+    let Navigate = useNavigate();
     const [data, setData] = useState(null);
     const [expanded, setExpanded] = useState(false);
     const [comment, setComment] = useState("");
-
+    const [userINFO, setUserInfo] = useState(() => null);
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -55,7 +55,12 @@ export default function CustomCard(props) {
     }
     /************************************************************/
     useEffect(() => {
+        if (!Auth()) {
+            Navigate('/');
+            return;
+        }
         setData(props.data);
+        setUserInfo(props.userINFO);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     /************************************************************/
@@ -94,7 +99,7 @@ export default function CustomCard(props) {
                 </CardContent>
                 <CardActions disableSpacing>
                     <IconButton aria-label="add to favorites" onClick={() => addLikeOnPost(data._id)}>
-                        <FavoriteIcon color={data ? (data.likes.includes(_id) ? "error" : "grey") : "grey"} />
+                        <FavoriteIcon color={data ? (data.likes.includes(userINFO._id) ? "error" : "grey") : "grey"} />
                         <Typography sx={{ mx: 1 }}>
                             {data && data.likesCount}
                         </Typography>

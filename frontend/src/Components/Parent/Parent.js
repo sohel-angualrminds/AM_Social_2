@@ -8,21 +8,33 @@ import Skeleton from '../Skeleton/Skeleton'
 import Modal from '../AddPost/Modal';
 import { getAllPosts } from '../../Services/Services';
 import CustomSnackbar from '../Snackbar/snackbar'
-
+import { Auth } from '../Auth/Auth'
+import { useNavigate } from 'react-router-dom'
+import { getItemFromLocalStorage } from '../../Services/local'
 
 const fakeSkeleton = [1020, 1024, 2024, 3024, 4050];
 
 function Parent() {
+    let Navigate = useNavigate();
+    /********************************************************************************/
     /*for getting all states*/
     const [allPosts, setAllPost] = useState(() => []);
     const [success, setSuccess] = useState(() => null);
-    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState(() => null);
     const [postAdded, setPostAdded] = useState(() => false);
+    const [userINFO, setUserInfo] = useState(() => null);
     /********************************************************************************/
 
 
-
+    /********************************************************************************/
     //for getting all posts
+    function authenticate() {
+        if (!Auth()) {
+            Navigate('/');
+            return;
+        }
+    }
+
     async function getsAllPosts() {
         try {
             const res = await getAllPosts(1);
@@ -32,8 +44,7 @@ function Parent() {
                 throw new Error(res);
             }
         } catch (err) {
-            console.log(err);
-            setError({
+            setErrors({
                 msg: err.AxiosError,
                 variant: "error"
             });
@@ -42,20 +53,16 @@ function Parent() {
 
 
     async function setStatesValue(value, snackbar = {}) {
+        await setErrors(null);
         const { error, success, message } = snackbar;
         if (error) {
-            setError({ error, message, open: true, severity: "error" });
-            setTimeout(() => {
-                setError(null);
-            }, 4000);
-            return
+            console.log(errors);
+            setErrors({ error, message, open: true, severity: "error" });
+            return;
         }
-
+        await setSuccess(null);
         if (success) {
             setSuccess({ success, message, open: true, severity: "success" });
-            setTimeout(() => {
-                setSuccess(null);
-            }, 4000);
         }
         setPostAdded(value);
     }
@@ -64,6 +71,7 @@ function Parent() {
 
     /*use effects */
     useEffect(() => {
+        authenticate();
         const get = async () => {
             try {
                 const res = await getsAllPosts();
@@ -76,6 +84,8 @@ function Parent() {
         get();
     }, [postAdded]);
 
+
+    /********************************************************************************/
     return (
         <div>
             <Header />
@@ -88,13 +98,13 @@ function Parent() {
                     alignItems: "center"
                 }}>
                     {
-                        allPosts.length > 0 ? allPosts.map((post) => <Card key={post._id} data={post} />)
+                        allPosts.length > 0 ? allPosts.map((post) => <Card key={post._id} userINFO={userINFO} data={post} />)
                             : fakeSkeleton.map(key => <Skeleton key={key} />)
                     }
                 </Box>
                 <Modal setState={setStatesValue} />
                 {/*Snackbars*/}
-                {error && <CustomSnackbar object={error} />}
+                {errors && <CustomSnackbar object={errors} />}
                 {success && <CustomSnackbar object={success} />}
             </Container>
         </div >
